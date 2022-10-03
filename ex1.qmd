@@ -1,0 +1,68 @@
+---
+title: "Week 1 Exercise Part B"
+format: html
+editor: visual
+---
+
+```{r}
+#| label: load-packages
+#| include: false
+library(ggplot2)
+```
+
+## Sample distribution
+
+I generate samples according with given parameters using the rnbinom function. Documentation seems to imply that when mu is specified, the size parameter is the same as dispersion, but it also states:
+
+> The variance is mu + mu^2/size in this parametrization.
+
+Which is at odds with the exercise description.
+
+
+```{r}
+#| warning: false
+#| echo: true
+
+mu <- 10
+dispersion <- 2
+
+samples <- rnbinom(n = 100, mu = mu, size = dispersion)
+
+computedMean <- mean(samples)
+computedVariance <- var(samples)
+```
+
+
+The mean is: `r computedMean` and the variance: `r computedVariance`
+
+The computed variance does seem to match the formula given in the documentation.
+
+## Generate plots
+
+I utilize ggplot to generate the normal histogram, as well as two additional histograms where the y- and x-axis have been log scaled (as the instructions were kinda vague).
+
+
+
+```{r,warning=FALSE}
+#| warning: false
+#| echo: true
+
+ggplot(data.frame(samples), aes(samples)) +             
+  geom_histogram(bins = 20)+
+  ggtitle("Normal Histogram")+
+  theme_bw()
+
+
+ggplot(data.frame(samples), aes(samples)) +             
+  geom_histogram(bins = 20) +
+  scale_x_log10()+
+  ggtitle("Histogram X-axis log10 scaled")+
+  theme_bw()
+
+ggplot(data.frame(samples), aes(samples)) +             
+  geom_histogram(bins = 20) +
+  scale_y_log10()+
+  ggtitle("Histogram Y-axis log10 scaled")+
+  theme_bw()
+
+```
